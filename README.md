@@ -31,13 +31,13 @@ Se proporciona un fichero Dockerfile que monta una imagen con Terraform y el cli
 Para construir la imagen, debes ejecutar:
 
 ```
-docker build . -t ogg_bidirectional
+docker build . -t ogg_unidirectional
 ```
 
 Una vez construida la imagen, ejecuta el siguiente comando para entrar en el bash del contenedor:
 
 ```
-docker run -it --rm -e KEY_ID=<AWS_USER_KEY_ID> -e SECRET_ID=<AWS_SECRET_KEY_ID> -v $(pwd)/iac:/root/iac --entrypoint /bin/bash ogg_bidirectional
+docker run -it --rm -e KEY_ID=<AWS_USER_KEY_ID> -e SECRET_ID=<AWS_SECRET_KEY_ID> -v $(pwd)/iac:/root/iac --entrypoint /bin/bash ogg_unidirectional
 ```
 
 reemplazando:
