@@ -1,47 +1,61 @@
-# ogg_single_replication
-Este repositorio corresponde al caso de uso de replicación simple, unidireccional, utilizando Golden Gate.
+# Replicación de cambios unidireccional con Oracle GoldenGate
 
-## Requisitos
-Se necesita tener instalado Docker.
+Este repositorio muestra un ejemplo de replicación de cambios desde una tabla origen en Oracle y dos tablas destino en Postgresql
 
-Además, para ejecutar este proyecto se necesitan las credenciales de un usuario de AWS con permisos para gestionar:
+# Requisitos
 
-- VPC
-- EC2
-- RDS (Oracle y Postgresql)
+Para poder ejecutar este ejemplo necesitas;
 
-La ejecución tiene un coste muy pequeño en AWS.
+- Docker
+- Credenciales de consola de un usuario de AWS con permiso para manejar EC2, RDS Oracle, MSK, VPC, Security Groups
 
-## ¿Cómo lo ejecuto?
-Para ejecutarlo, primero hay que construir la imagen Docker utilizando el siguiente comando:
+# Setup
+
+Se proporciona un fichero Dockerfile que monta una imagen con Terraform y el cliente de AWS para no tener que instalarlo en local.
+
+Para construir la imagen, debes ejecutar:
 
 ```
-docker build . --no-cache -t ogg_single_replication
+docker build . -t ogg_bidirectional
 ```
 
-Una vez construida la imagen, ejecutamos:
+Una vez construida la imagen, ejecuta el siguiente comando para entrar en el bash del contenedor:
+
 ```
-docker run -it --rm -e KEY_ID=<AWS_KEY_ID> -e SECRET_ID=<AWS_SECRET_ID> --entrypoint /bin/bash ogg_single_replication
+docker run -it --rm -e KEY_ID=<AWS_USER_KEY_ID> -e SECRET_ID=<AWS_SECRET_KEY_ID> -v $(pwd)/iac:/root/iac --entrypoint /bin/bash ogg_bidirectional
 ```
 
-sustituyendo <AWS_KEY_ID> y <AWS_SECRET_ID> por el valor correspondiente de las credenciales de AWS.
+reemplazando:
 
-Al ejecutar el comando se accede al terminal del contenedor, y tenemos que ejecutar:
+- AWS_USER_KEY_ID por el ID del usuario de consola de AWS
+- AWS_SECRET_KEY_ID por el SECRET del usuario de consola de AWS
 
-``` 
+Una vez dentro, para construir la infraestructura, ejecuta:
+
+```
 sh build.sh
 ```
 
-Con este script lanzamos la ejecución de Terraform que creará todo el entorno necesario en AWS. Una vez creado, para realizar 
-la replicación, tenemos que seguir los pasos marcados en el post.
+Y sigue los pasos enumerados en el post para construir el ejemplo
 
-El script tarda unos 15 minutos en crear toda la infraestructura
+# Destruir el entorno
 
-## ¿Cómo destruyo el entorno?
-Desde la misma terminal del contenedor Docker, lanzamos:
+El entorno se crea en AWS por lo que es necesario destruirlo cuando hayas completado el ejemplo. Para ello, volvemos a entrar en el bash del contenedor:
+
+Una vez construida la imagen, ejecuta el siguiente comando para entrar en el bash del contenedor:
+
+```
+docker run -it --rm -e KEY_ID=<AWS_USER_KEY_ID> -e SECRET_ID=<AWS_SECRET_KEY_ID> -v $(pwd)/iac:/root/iac --entrypoint /bin/bash ogg_bidirectional
+```
+
+reemplazando:
+
+- AWS_USER_KEY_ID por el ID del usuario de consola de AWS
+- AWS_SECRET_KEY_ID por el SECRET del usuario de consola de AWS
+
+Una vez dentro, ejecutamos:
 
 ```
 sh destroy.sh
 ```
 
-Con este script se lanza el comando de Terraform para destruir la infraestructura creada.
