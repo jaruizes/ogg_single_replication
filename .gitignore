@@ -31,3 +31,11 @@ node_modules/
 $RECYCLE.BIN/
 
 .DS_Store
+
+.terraform
+.terraform.*
+terraform.tfstate
+terraform.tfstate.*
+
+iac/ssh/ssh_gg
+iac/ssh/ssh_gg.pub
