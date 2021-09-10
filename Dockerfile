@@ -18,10 +18,8 @@ RUN ./aws/install
 # Cleaning up
 RUN apt-get clean all
 
-RUN mkdir /root/.aws
 RUN apt-get install -y git
+RUN mkdir /root/iac
 
-COPY iac/ /root/iac/
+#COPY iac/ /root/iac/
 WORKDIR /root/iac/
-
-
